@@ -3,6 +3,7 @@ using EmployeeManagementApp.Dtos.Request;
 using EmployeeManagementApp.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementApp.Controllers
 {
@@ -27,6 +28,10 @@ namespace EmployeeManagementApp.Controllers
 			{
 				await _repo.CreateEmployeeSalaryAsync(employeeSalary);
 				return ResponseMessage.GetResult(true, "Successfully created...");
+			}
+			catch (DbUpdateException ex)
+			{
+				return ResponseMessage.GetResult(false, "Details already exist to this employee number...");
 			}
 			catch (Exception ex)
 			{
@@ -119,6 +124,10 @@ namespace EmployeeManagementApp.Controllers
 					return ResponseMessage.GetResult(false, "Update failed ...");
 				}
 
+			}
+			catch (DbUpdateException ex)
+			{
+				return ResponseMessage.GetResult(false, "Details already exist to this employee number...");
 			}
 			catch (Exception ex)
 			{

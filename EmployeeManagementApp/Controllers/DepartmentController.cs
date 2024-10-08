@@ -3,6 +3,7 @@ using EmployeeManagementApp.Dtos.Request;
 using EmployeeManagementApp.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementApp.Controllers
 {
@@ -27,6 +28,10 @@ namespace EmployeeManagementApp.Controllers
 			{
 				await _repo.CreateDepartmentAsync(departmentDto);
 				return ResponseMessage.GetResult(true, "Successfully created...");
+			}
+			catch (DbUpdateException ex)
+			{
+				return ResponseMessage.GetResult(false, "Department already exist...");
 			}
 			catch (Exception ex)
 			{
@@ -120,10 +125,15 @@ namespace EmployeeManagementApp.Controllers
 				}
 
 			}
+			catch (DbUpdateException ex)
+			{
+				return ResponseMessage.GetResult(false, "Department already exist...");
+			}
 			catch (Exception ex)
 			{
 				return ResponseMessage.GetResult(false, ex.Message);
 			}
+			
 		}
 	}
 }
